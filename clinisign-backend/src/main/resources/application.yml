@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: clinisign-backend
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/clinisign_db}
+    username: ${SPRING_DATASOURCE_USERNAME:clinisign_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:clinisign_pass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd'T'HH:mm:ss
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT
+app:
+  jwt:
+    secret: ${JWT_SECRET:CliniSign_SIAN_SALUD_Ambulancias_JWT_Secret_Key_2024_Medellin_Colombia_12345}
+    expiration: ${JWT_EXPIRATION:86400000}       # 24 horas en ms
+    refresh-expiration: 604800000                 # 7 días en ms
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173}
+  upload:
+    dir: ${UPLOAD_DIR:./uploads}
+
+# Springdoc OpenAPI
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+logging:
+  level:
+    com.clinisign: DEBUG
+    org.springframework.security: INFO
+
+---
+# ─── Perfil PROD ────────────────────────────────────────────
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    com.clinisign: INFO
+    org.springframework.security: WARN
+
+springdoc:
+  swagger-ui:
+    enabled: false

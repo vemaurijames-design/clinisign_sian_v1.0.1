@@ -1,0 +1,43 @@
+{
+  "name": "clinisign-frontend",
+  "version": "1.0.0",
+  "description": "CliniSign - SIAN SALUD Ambulancias - Frontend React",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext js,jsx --report-unused-disable-directives"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "axios": "^1.6.8",
+    "react-hook-form": "^7.51.3",
+    "react-signature-canvas": "^1.0.6",
+    "xlsx": "^0.18.5",
+    "date-fns": "^3.6.0",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.368.0",
+    "sonner": "^1.4.41",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-tabs": "^1.0.4",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-checkbox": "^1.0.4",
+    "recharts": "^2.12.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}

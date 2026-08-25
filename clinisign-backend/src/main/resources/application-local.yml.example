@@ -1,0 +1,12 @@
+# Copia este archivo como application-local.yml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/clinisign_db
+    username: clinisign_user
+    password: clinisign_pass
+
+app:
+  jwt:
+    secret: CliniSign_SIAN_SALUD_Ambulancias_JWT_Secret_Key_2024_Medellin_Colombia_12345
+  cors:
+    allowed-origins: http://localhost:3000,http://localhost:5173

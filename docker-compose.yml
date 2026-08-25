@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # ─── Base de datos PostgreSQL ───────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: clinisign_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: clinisign_db
+      POSTGRES_USER: clinisign_user
+      POSTGRES_PASSWORD: clinisign_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01_init.sql
+    networks:
+      - clinisign_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clinisign_user -d clinisign_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Backend Spring Boot ─────────────────────────────────
+  backend:
+    build:
+      context: ./clinisign-backend
+      dockerfile: Dockerfile
+    container_name: clinisign_backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/clinisign_db
+      SPRING_DATASOURCE_USERNAME: clinisign_user
+      SPRING_DATASOURCE_PASSWORD: clinisign_pass
+      JWT_SECRET: CliniSign_SIAN_SALUD_Ambulancias_JWT_Secret_Key_2024_Medellin_Colombia
+      JWT_EXPIRATION: 86400000
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - clinisign_net
+    volumes:
+      - uploads_data:/app/uploads
+
+  # ─── Frontend React (Nginx) ──────────────────────────────
+  frontend:
+    build:
+      context: ./clinisign-frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8080/api
+    container_name: clinisign_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - clinisign_net
+
+volumes:
+  postgres_data:
+  uploads_data:
+
+networks:
+  clinisign_net:
+    driver: bridge
